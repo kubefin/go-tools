@@ -25,6 +25,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"k8s.io/klog/v2"
@@ -35,6 +36,7 @@ var file embed.FS
 
 type AWSEC2PriceClient struct {
 	latestPriceDataTime time.Time
+	dataLock            sync.Mutex
 	priceData           *GeneralPriceData
 	priceDataURL        string
 }
@@ -47,6 +49,7 @@ func NewAWSEC2PriceClient(region string) (*AWSEC2PriceClient, error) {
 	client := &AWSEC2PriceClient{
 		priceDataURL: GlobalPriceDataBaseURL + region + "/index.json",
 		priceData:    &GeneralPriceData{},
+		dataLock:     sync.Mutex{},
 	}
 
 	if _, ok := ReginList[region]; !ok {
@@ -76,7 +79,9 @@ func NewAWSEC2PriceClient(region string) (*AWSEC2PriceClient, error) {
 
 func (a *AWSEC2PriceClient) Start() {
 	for range time.Tick(time.Second) {
+		a.dataLock.Lock()
 		a.updatePriceData()
+		a.dataLock.Unlock()
 	}
 }
 
@@ -121,6 +126,8 @@ func (a *AWSEC2PriceClient) GetOnDemandEC2PriceInfo(instanceType string) (*EC2Ge
 		return nil, fmt.Errorf("invalid input, parameter instanceType is needed")
 	}
 
+	a.dataLock.Lock()
+	defer a.dataLock.Unlock()
 	for _, item := range *a.priceData {
 		//return &item, nil
 		if item.InstanceType == instanceType {
@@ -133,6 +140,9 @@ func (a *AWSEC2PriceClient) GetOnDemandEC2PriceInfo(instanceType string) (*EC2Ge
 
 func (a *AWSEC2PriceClient) ListEC2PriceInfo() []EC2GeneralPrice {
 	ret := []EC2GeneralPrice{}
+
+	a.dataLock.Lock()
+	defer a.dataLock.Unlock()
 	ret = append(ret, *a.priceData...)
 
 	return ret

@@ -164,8 +164,8 @@ type PriceDimension struct {
 }
 
 type PricePerUnit struct {
-	USD string `json:"USD"`
-	CNY string `json:"CNY"`
+	USD float32 `json:"USD"`
+	CNY float32 `json:"CNY"`
 }
 
 type GeneralPriceData []EC2GeneralPrice
