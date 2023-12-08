@@ -1,4 +1,4 @@
-module kubefin.dev/go-tools/awspricing
+module kubefin.dev/go-tools
 
 go 1.20
 
