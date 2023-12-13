@@ -1,3 +1,1 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:2ef934ff1505f43bf5635b3e4d90ecc25a20a67e93af5ca69dd99d11a03424cd
-size 660
+[{"instanceType":"r5.2xlarge","region":"us-east-1-wl1-msp1","priceModel":"onDemand","vcpu":8,"memory":64,"unit":"Hrs","pricePerUnit":{"USD":"0.6800000000","CNY":""}},{"instanceType":"t3.medium","region":"us-east-1-wl1-msp1","priceModel":"onDemand","vcpu":2,"memory":4,"unit":"Hrs","pricePerUnit":{"USD":"0.0560000000","CNY":""}},{"instanceType":"g4dn.2xlarge","region":"us-east-1-wl1-msp1","priceModel":"onDemand","vcpu":8,"memory":32,"unit":"Hrs","pricePerUnit":{"USD":"1.3170000000","CNY":""}},{"instanceType":"t3.xlarge","region":"us-east-1-wl1-msp1","priceModel":"onDemand","vcpu":4,"memory":16,"unit":"Hrs","pricePerUnit":{"USD":"0.2240000000","CNY":""}}]
