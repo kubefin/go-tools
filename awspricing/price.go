@@ -78,7 +78,7 @@ func NewAWSEC2PriceClient(region string) (*AWSEC2PriceClient, error) {
 }
 
 func (a *AWSEC2PriceClient) Start() {
-	for range time.Tick(time.Second) {
+	for range time.Tick(time.Minute * 30) {
 		a.dataLock.Lock()
 		a.updatePriceData()
 		a.dataLock.Unlock()
