@@ -42,7 +42,7 @@ var ReginList = map[string]string{
 	"ap-northeast-2":          "Fri, 17 Nov 2023 17:44:44 GMT",
 	"us-west-2-phx-1":         "Fri, 17 Nov 2023 17:44:46 GMT",
 	"ap-northeast-1":          "Fri, 17 Nov 2023 17:44:44 GMT",
-	"us-east-1-msp-1 ":        "Fri, 17 Nov 2023 17:44:44 GMT",
+	"us-east-1-msp-1":         "Fri, 17 Nov 2023 17:44:44 GMT",
 	"ap-southeast-2-per-1":    "Fri, 17 Nov 2023 17:44:44 GMT",
 	"ap-northeast-1-tpe-1":    "Fri, 17 Nov 2023 17:44:44 GMT",
 	"us-east-1-chi-1":         "Fri, 17 Nov 2023 17:44:44 GMT",
@@ -131,6 +131,7 @@ type Product struct {
 type Attributes struct {
 	VCPU            string      `json:"vcpu"`
 	Memory          string      `json:"memory"`
+	GPU             string      `json:"gpu"`
 	InstanceType    string      `json:"instanceType"`
 	RegionCode      string      `json:"regionCode"`
 	Tenancy         TenancyType `json:"tenancy"`
@@ -176,6 +177,7 @@ type EC2GeneralPrice struct {
 	PriceModel   string       `json:"priceModel"`
 	VCPU         float64      `json:"vcpu"`
 	Memory       float64      `json:"memory"`
+	GPU          float64      `json:"gpu"`
 	PriceUnit    string       `json:"unit"`
 	PricePerUnit PricePerUnit `json:"pricePerUnit"`
 }
