@@ -228,11 +228,16 @@ func ConvertToGeneralPriceData(data *AWSEC2Data) (*GeneralPriceData, error) {
 		if err != nil {
 			memory = 0.0
 		}
+		gpu, err := strconv.ParseFloat(resourceItem.Attributes.GPU, 64)
+		if err != nil {
+			gpu = 0.0
+		}
 		item := EC2GeneralPrice{
 			InstanceType: resourceItem.Attributes.InstanceType,
 			Region:       resourceItem.Attributes.RegionCode,
 			VCPU:         cpu,
 			Memory:       memory,
+			GPU:          gpu,
 		}
 
 		item.PriceModel = PriceModelOnDemand
