@@ -42,6 +42,7 @@ func main() {
 			url = fmt.Sprintf(awspricing.CNPriceDataBaseURL + region + "/index.json")
 		}
 
+		fmt.Println("Start to download/parse EC2 price data from:", url)
 		getDataFunc := func() error {
 			resp, err := http.Get(url)
 			if err != nil {
@@ -64,26 +65,21 @@ func main() {
 				return err
 			}
 
-			regionData := map[string][]awspricing.EC2GeneralPrice{}
+			regionData := []awspricing.EC2GeneralPrice{}
 			for _, item := range *generalData {
-				if _, ok := regionData[item.Region]; !ok {
-					regionData[item.Region] = []awspricing.EC2GeneralPrice{}
-				}
-				regionData[item.Region] = append(regionData[item.Region], item)
+				regionData = append(regionData, item)
 			}
 
-			for region, data := range regionData {
-				jsonRet, err := json.Marshal(data)
-				if err != nil {
-					return err
-				}
-
-				err = os.WriteFile("awspricing/data/"+region+".json", jsonRet, 0644)
-				if err != nil {
-					return err
-				}
-				fmt.Printf("EC2 price data(%s) download/parse finished....\n", region)
+			jsonRet, err := json.Marshal(regionData)
+			if err != nil {
+				return err
 			}
+
+			err = os.WriteFile("awspricing/data/"+region+".json", jsonRet, 0644)
+			if err != nil {
+				return err
+			}
+			fmt.Printf("EC2 price data(%s) download/parse finished....\n", region)
 
 			return nil
 		}

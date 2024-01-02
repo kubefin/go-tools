@@ -210,12 +210,20 @@ func ConvertToGeneralPriceData(data *AWSEC2Data) (*GeneralPriceData, error) {
 			continue
 		}
 
-		// Following code is referring to: https://docs.aws.amazon.com/cost-management/latest/userguide/ce-filtering.html
-		usageType := strings.Split(resourceItem.Attributes.UsageType, "-")
-		if len(usageType) < 2 {
+		// There is two formats: USE2-BoxUsage:t3.micro and BoxUsage:t3.micro
+		// So the following code is used to extract the correct usage type
+		usageIndex := strings.IndexRune(resourceItem.Attributes.UsageType, ':')
+		if usageIndex == -1 {
 			continue
 		}
-		usageTypeWithOutInstanceType := strings.Split(usageType[1], ":")
+		reginIndex := strings.IndexRune(resourceItem.Attributes.UsageType, '-')
+		usageType := resourceItem.Attributes.UsageType
+		if reginIndex != -1 && reginIndex < usageIndex {
+			usageType = strings.SplitN(resourceItem.Attributes.UsageType, "-", 2)[1]
+		}
+
+		// Following code is referring to: https://docs.aws.amazon.com/cost-management/latest/userguide/ce-filtering.html
+		usageTypeWithOutInstanceType := strings.SplitN(usageType, ":", 2)
 		if len(usageTypeWithOutInstanceType) < 2 || (usageTypeWithOutInstanceType[0] != "BoxUsage" && usageTypeWithOutInstanceType[0] != "Reservation") {
 			continue
 		}
